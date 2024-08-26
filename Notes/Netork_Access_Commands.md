@@ -163,8 +163,94 @@ sendp(a/b); sendp(c/d)
 ```
 
 
+Layer 2 Attack mitigation techniques
+The following are some mechanisms that can be be configured to better secure your switched network:
 
+Shutdown unused ports - Bare minimum to secure access ports is to simply shut down any and all inactive ports.
+```
+interface fastethernet 0/1
+shutdown
+```
+Switchport Port Security - Can be used to limit the number of MAC addresses that can be dynamically learned on a port or static MAC addresses can be assigned to one. Violation modes of shut down can be used to secure the port should a violation occur.
+```
+switchport port-security
+switchport port-security maximum 1
+switchport port-security mac-address sticky
+switchport port-security violation shutdown
+```
+IP Source Guard - Mitigates the effects of IP address spoofing attacks on the Ethernet LAN. With IP source guard enabled, the source IP address in the packet sent from an untrusted access interface is validated against the DHCP snooping database. If the packet cannot be validated, it is discarded.
+```
+interface fastethernet 0/1
+ip verify source
+ip source binding 0100.0230.0002 vlan 11 10.10.0.40 interface fastethernet 0/1
+```
+Manually assign STP Root - Manually assign the Spanning Tree Protocol (STP) root bridge allows for a deterministic root bridge election rather than the bridge with the lowest bridge priority. This allows the central most switch to be the root that will best allow traffic to flow in an efficent manner.
+```
+spanning-tree vlan <vlan-id> priority 0
+```
+BPDU Guard - BPDU Guard is a feature used in network switches to enhance network security by protecting against unintentional loops and rogue devices. It works by automatically shutting down a port if it receives Bridge Protocol Data Units (BPDUs), which are indicative of spanning tree protocol (STP) activity.
+```
+interface fastethernet 0/1
+spanning-tree bpduguard enable
+```
+DHCP Snooping - DHCP Snooping is a security feature commonly found in network switches that helps prevent rogue or unauthorized DHCP servers from distributing incorrect or malicious IP configuration information to network clients. It operates by monitoring and controlling DHCP messages exchanged between DHCP clients and servers. Configuration is done on ports that are connected to (or leading to) the DHCP server.
+```
+ip dhcp snooping
+interface fastethernet 0/1
+ ip dhcp snooping trust
+ ip dhcp snooping vlan <vlan-id>
+```
 
+802.1x - The 802.1x standard defines a client-server-based access control and authentication protocol that prevents unauthorized clients from connecting to a LAN through ports until they are properly authenticated. The authentication server authenticates each client connected to a switchport before making available any services offered by the switch or the LAN.
+
+```
+aaa new-model
+aaa authentication dot1x default group radius
+dot1x system-auth-control
+identity profile default
+interface fastethernet 0/1
+access-session port-control auto
+dot1x pae authenticator
+```
+Dynamic ARP inspection (DAI) - Prevents Address Resolution Protocol (ARP) spoofing or “man-in-the-middle” attacks. ARP requests and replies are compared against entries in the DHCP snooping database, and filtering decisions are made on the basis of the results of those comparisons.
+```
+ip arp inspection vlan {vlan-id> | <vlan-range>}
+interface fastethernet 0/1
+ip arp inspection [ trust | untrust ]
+ip arp inspecion filter <arp-acl-name> vlan {vlan-id> | <vlan-range>} [static]
+```
+Static CAM entries - Static CAM (Content Addressable Memory) entries refer to manually configured entries in the CAM table of Ethernet switches. These entries map specific MAC addresses to specific switch ports and are used to optimize network performance and facilitate specific network configurations.
+```
+mac-address-table static 1234:abcd:5678 vlan 1 interface fastethernet 0/1
+```
+Static ARP entries - Static ARP (Address Resolution Protocol) entries are manually configured mappings between IP addresses and MAC addresses in the ARP table of network devices. These entries are used to ensure stable communication between specific devices on the network.
+```
+Linux:
+sudo ip neighbor add 10.10.0.50 lladdr 11:22:33:44:55:66 nud permanent dev eth0
+sudo ip neighbor delete 10.10.0.50 lladdr 11:22:33:44:55:66 nud permanent dev eth0
+Windows:
+arp -s 10.10.0.50 11:22:33:44:55:66
+```
+Disable DTP negotiations - To disable Dynamic Trunking Protocol (DTP) negotiations on a Cisco switch interface, you need to manually configure the interface as an access port or set it to operate in a specific trunking mode, such as "trunk" or "nonegotiate."
+
+```
+interface fastethernet 0/1
+ switchport mode trunk
+ switchport nonegotiate
+interface fastethernet 0/2
+ switchport mode access
+ switchport nonegotiate
+```
+Manually assign Access/Trunk ports - By default, switch ports can be either a trunk or access port depending on the device connected to the port and dynamic negotiations that take place. Manually assigning ports as either trunk or access ports provides greater control and ensures that the network operates as intended.
+
+```
+interface fastethernet 0/1
+ switchport mode trunk
+ switchport nonegotiate
+interface fastethernet 0/2
+ switchport mode access
+ switchport nonegotiate
+```
 
 
 
