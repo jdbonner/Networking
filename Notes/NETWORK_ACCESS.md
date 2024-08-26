@@ -87,7 +87,7 @@ https://net.cybbh.io/public/networking/latest/01_data/fg.html#_1_2_explain_osi_l
 https://net.cybbh.io/public/networking/latest/01_data/fg.html#_1_2_2_describe_lan_topologies_and_devices
 
 ## Topologies
-###Bus
+### Bus
 ![a](https://www.nakivo.com/blog/wp-content/uploads/2021/04/A-bus-network-topology.webp)
 ### Star
 ![a](https://www.nakivo.com/blog/wp-content/uploads/2021/04/The-star-network-topology.webp)
@@ -111,27 +111,80 @@ devices that allow a connection to be extended beyond the normal operational cab
 devices that allow multiple nodes to connect on the network, but on their own collision domain. The layer 2 originating MAC address of the frame are learned from the incoming frames and are stored in the mac address table memory, also called a Content Addressable Memory (CAM) table.
 ![a](https://images.spiceworks.com/wp-content/uploads/2022/07/26120446/Ciscos-Industry-Standard-Network-Switch.png)
 ### Routers
+Devices that connect networks
 ![a](https://www.cisco.com/content/dam/cisco-cdc/site/us/en/images/networking/Routing_Listing_Rendering_758x484_v2.png)
 
 ## Ethernet Timing
+Bit Time - is the period of time is required for a bit to be placed and sensed on the media. Network speeds are measured by how many bits can be placed or sensed on the media in 1 second. Each increase in speed requires more bits to be sent during the same 1 second internal. To accomplish this the bit-times are reduced.
+
+```
 Speed      Bit-time
 10 Mbps    100ns
 100 Mbps   10ns
 1 Gbps     1ns
 10 Gbps    .1ns
 100 Gbps   .01ns
+```
+
+# OSI Layer 2
+https://net.cybbh.io/public/networking/latest/01_data/fg.html#_1_3_explain_osi_layer_2_protocols_headers_and_technologies
+
+## Technologies
+```
+Technology  	Standard
+Ethernet      802.3(x)
+Wireless      802.11(x)
+Token Ring    802.5
+```
+
+## Data Link Sub-Layers
+```
+MAC (Medium Access Control)      # https://en.wikipedia.org/wiki/Medium_access_control
+LLC (Logical Link Control)       # https://en.wikipedia.org/wiki/Logical_link_control
+```
+
+# How Frames work
+https://net.cybbh.io/public/networking/latest/01_data/fg.html#_1_3_2_explain_why_and_how_frames_are_interpreted_by_different_devices
+
+## Message Formatting method
+![a](https://git.cybbh.space/net/public/raw/master/modules/networking/slides-v4/images/Message_Format.png)
+  ```
+  Header - Layer 2 to Layer 7
+    The header contains information related to control and communication processes between different protocol elements for different devices. 
+  Data - Payload
+    This is the actual data being transmitted which contains the payload. This payload may include another higher level message that consists of the same elements.
+  Footer - FCS/CRC
+    Commonly referred to as the trailer. The contents vary between communication methods or protocols. 
+```
+
+## Encapsulation and Decapsulation
+![a](https://git.cybbh.space/net/public/raw/master/modules/networking/slides-v4/images/PDU_SDU.png)
+![a](https://git.cybbh.space/net/public/raw/master/modules/networking/slides-v4/images/encap.png)
 
 
+# Identify how switches affect network traffic
+https://net.cybbh.io/public/networking/latest/01_data/fg.html#_1_3_3_identify_how_switches_affect_network_traffic_and_the_visibility_of_network_traffic_by_other_hosts
 
-
-
-
-
-
-
-
-
-
+## switch operation
+```
+  -Building MAC-Address (CAM) Table
+    -Learns by reading Source MAC addresses
+  -Forwarding Frames
+    -Decision based on Destination MAC address
+```
+## Switch Operation
+```
+  -Switching Modes
+    -Cut-Through
+    -Fragment-Free
+    -Store-and-Forward
+```
+```
+  -CAM Table Overflow Attack
+    -Send frames with bogus source MAC address to switch
+    -Cause switch to fill table with bogus addresses
+    -Switch will not be able to learn new (valid) MAC addresses
+```
 
 
 
