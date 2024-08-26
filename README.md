@@ -1,4 +1,4 @@
-![](https://preview.redd.it/sit-down-and-rest-by-the-bonfire-v0-cwy4xhfpttmb1.jpg?width=640&crop=smart&auto=webp&s=a879ab8c8b135e65edd59fac79fb0acd37d1b75c)
+![](https://banner2.cleanpng.com/20180325/irq/av0asjtr0.webp)
 # Resources
 
 ## Book
