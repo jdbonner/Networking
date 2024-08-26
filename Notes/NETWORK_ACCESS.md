@@ -419,6 +419,107 @@ Disable it:
 May require it for VOIP
 ```
 
+## STP Vulnerabilities
+https://net.cybbh.io/public/networking/latest/01_data/fg.html#_1_3_13_explain_stp_with_its_vulnerabilities
+### Spanning Tree Protocol (STP)
+![a](https://git.cybbh.space/net/public/raw/master/modules/networking/slides-v4/images/Spanning-Tree-Protocol-Overview.png)
+
+```
+Root decision process
+
+1.Elect root Bridge
+2.Identify the Root ports on non-root bridge
+3.Identify the Designated port for each segment
+4.Set alternate ports to blocking state
+```
+
+### Types
+```
+802.1D STP
+Per VLAN Spanning Tree + (PVST+)
+802.1w – Rapid Spanning Tree Protocol (RSTP)
+Rapid Per VLAN Spanning Tree + (RPVST+)
+802.1s (Multiple Spanning Tree)
+```
+
+
+### Spanning tree attack
+```
+Crafted Bridge Protocol Data units (BPDU)
+Used to perform a DoS or MitM
+```
+
+
+## Port Security and Vulnerabilities
+https://net.cybbh.io/public/networking/latest/01_data/fg.html#_1_3_14_explain_port_security_with_its_vulnerabilities
+
+### Port Security Modes
+Shutdown (default)
+
+Protect
+
+Restrict
+
+
+### Port Security Can help to:
+Restrict unauthorized access
+
+Limit MAC address learned on port
+
+Prevent CAM Table Overflow attacks
+
+
+### Port Security Vulnerabilities
+Dependant on MAC address
+
+MAC spoofing
+
+
+## Layer 2 Attack mitigation techniques
+https://net.cybbh.io/public/networking/latest/01_data/fg.html#_1_3_15_layer_2_attack_mitigation_techniques
+
+### Layer 2 Attack mitigation techniques
+Shutdown unused ports
+
+Enable Port Security
+
+IP Source Guard
+
+Manually assign STP Root
+
+BPDU Guard
+
+DHCP Snooping
+
+### Layer 2 Attack mitigation techniques
+
+802.1x
+
+Dynamic ARP inspection (DAI)
+
+Static CAM entries
+
+Static ARP entries
+
+Disable DTP negotiations
+
+Manually assign Access/Trunk ports
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ![a]()
