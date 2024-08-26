@@ -454,19 +454,30 @@ Used to perform a DoS or MitM
 https://net.cybbh.io/public/networking/latest/01_data/fg.html#_1_3_14_explain_port_security_with_its_vulnerabilities
 
 ### Port Security Modes
-Shutdown (default)
+```
+MAC Address Limit:
+Port security allows administrators to specify the maximum number of MAC addresses allowed on a switch port.
+When enabled, the switch monitors the MAC addresses of devices connected to the port and takes action if the number of MAC addresses exceeds the configured limit.
 
-Protect
+MAC Address Learning:
+When a device sends traffic through a switch port, the switch learns the device’s MAC address and associates it with the port.
+The switch maintains a table, known as the MAC address table or CAM table, which maps MAC addresses to switch ports.
 
-Restrict
+Violation Actions:
+  Administrators can define violation actions to be taken when port security violations occur.
+  Common violation actions include shutting down the port, sending an SNMP trap, or logging a message.
+  These actions help alert administrators to potential security breaches and mitigate unauthorized access attempts.
+  The following are the possible modes:
+    protect - Drops any frames with an unknown source addresses.
+    restrict - Same as protect except it additionally creates a violation counter report.
+    shutdown(default) - Places the interface into an "error-disabled" state immediately and sends an SNMP trap notification. This is typically the default mode.
+```
 
 
 ### Port Security Can help to:
-Restrict unauthorized access
-
-Limit MAC address learned on port
-
-Prevent CAM Table Overflow attacks
+-Restrict unauthorized access        # Restrict the possible allowed MAC addresses to a port to (1).
+-Limit MAC address learned on port   #
+-Prevent CAM Table Overflow attacks  # Protect against CAM Table Overflow attack. This is were an attacker can flood a switch with hundreds of bogus MAC addresses in effort to fill its CAM tables. Once full, the switch will operate much like a Layer 1 Hub.
 
 
 ### Port Security Vulnerabilities
@@ -479,30 +490,21 @@ MAC spoofing
 https://net.cybbh.io/public/networking/latest/01_data/fg.html#_1_3_15_layer_2_attack_mitigation_techniques
 
 ### Layer 2 Attack mitigation techniques
+
 Shutdown unused ports
-
 Enable Port Security
-
 IP Source Guard
-
 Manually assign STP Root
-
 BPDU Guard
-
 DHCP Snooping
 
 ### Layer 2 Attack mitigation techniques
 
 802.1x
-
 Dynamic ARP inspection (DAI)
-
 Static CAM entries
-
 Static ARP entries
-
 Disable DTP negotiations
-
 Manually assign Access/Trunk ports
 
 
