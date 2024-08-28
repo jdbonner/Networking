@@ -9,7 +9,12 @@ hint: favorite lothric knight
 ```
 
 
+Blue Internet Host
+Student#: student4
 
+Command: ssh student@10.50.26.79 -X
+
+Password: password
 
 
 
