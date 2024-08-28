@@ -157,14 +157,7 @@ sudo tcpdump 'ip[4:2] = 20' -vvXX
 ## TCP Raw
 
 > vim tcp_raw_sock.py
-> 
-
-
-
-
-
-
-
+> chmod +x txp_raw_sock.py
 
 
 
@@ -335,7 +328,6 @@ s.sendto(packet, (dst_ip, 0))
 ```
 
 ```
-
 
 > run on the other box
 ```
