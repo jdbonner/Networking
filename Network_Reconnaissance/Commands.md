@@ -4,6 +4,10 @@ VYOS system creds
 vyos
 password
 
+Entry Float IP: 10.50.37.85
+Your Network Number is 2 (Given by Instructor)
+Credentials: net2_studentX:passwordX
+X is your student number
 
 
 ## Ping
@@ -50,7 +54,7 @@ Discovery probes
 - -T2 - Polite - 1 Sec
 - -T3 - Normal - 1 Sec
 - -T4 - Aggresive - 500 ms    # use this one
-- -T5 - Insane - 250 ms
+- -T5 - Insane - 250 ms%3CmxGraphModel%3E%3Croot%3E%3CmxCell%20id%3D%220%22%2F%3E%3CmxCell%20id%3D%221%22%20parent%3D%220%22%2F%3E%3CmxCell%20id%3D%222%22%20value%3D%22%26lt%3Bspan%20style%3D%26quot%3Bfont-family%3A%20-apple-system%2C%20BlinkMacSystemFont%2C%20%26amp%3Bquot%3BSegoe%20UI%26amp%3Bquot%3B%2C%20%26amp%3Bquot%3BNoto%20Sans%26amp%3Bquot%3B%2C%20Helvetica%2C%20Arial%2C%20sans-serif%2C%20%26amp%3Bquot%3BApple%20Color%20Emoji%26amp%3Bquot%3B%2C%20%26amp%3Bquot%3BSegoe%20UI%20Emoji%26amp%3Bquot%3B%3B%20font-size%3A%2016px%3B%20text-align%3A%20start%3B%20text-wrap%3A%20wrap%3B%20background-color%3A%20rgb(255%2C%20255%2C%20255)%3B%26quot%3B%26gt%3B10.50.26.79%26lt%3B%2Fspan%26gt%3B%22%20style%3D%22edgeLabel%3Bhtml%3D1%3Balign%3Dcenter%3BverticalAlign%3Dmiddle%3Bresizable%3D0%3Bpoints%3D%5B%5D%3B%22%20vertex%3D%221%22%20connectable%3D%220%22%20parent%3D%221%22%3E%3CmxGeometry%20x%3D%22241%22%20y%3D%22623.8095238095237%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3C%2Froot%3E%3C%2FmxGraphModel%3E
 
 ## Traceroute
 
