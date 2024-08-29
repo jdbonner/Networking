@@ -2,23 +2,34 @@ Net Recon Methodology
 
 Host discovery
 ruby ping sweep (if ping available)
-for i in {1..254};do (ping -c 1 192.168.1
-
-
-
-
-
-
+for i in {1..254};do (ping -c 1 192.168.1.$i 2>/dev/null | grep "bytes from" &) ;done
+nmap scan if no ping (Check scan methodology below)
+port discovery
+nmap (check scan methodology below)
+nc scan script
+port validation
+banner grab using nc [ip addr][port]
+follow-on actions based on ports found
+if 21 or 80 wget -r [ip addr] (or) wget -r ftp://[ip addr] (or) firefox
+if 22 or 23 connect and passive recond
+if no 22 or 23 and you need to get on the box and you have prot 21
+ftp [ip addr] connects to ftp server
+passive
+ls
+get [file name]
 
 
 scan methodology
+nmap -Pn [ip addr] -T4 -p 21-23,80
 
+quick scan ports 21-23,80
+specific ports based on hitns/clues found
+well known port range
+which tcpdump wireshark nmap telnet get curl ping
 
-
-
-
-
-
+0-1023 (actually scan 1-1023)
+chunks of 2000 or first 10000 ports (65535)
+hail mary - scan all the ports (65535)
 
 
 
@@ -48,4 +59,64 @@ which tcpdump wireshark nmap telnet get curl ping
 
 
 
+Red Network Recon
+Entry Float IP: 10.50.37.85
+
+Your Network Number is 2 (Given by Instructor)
+
+Credentials: net2_studentX:passwordX
+
+X is your student number
+
+
+
+Scheme of Maneuver:
+>Blue-Internet-Host
+-> Red-Internet-Host
+--> Red Boundry Router: DONOVIAN CYBERSPACE
+
+Target Section:
+
+T1
+Hostname: networking-ctfd-2.server.vta
+Record Type: TXT
+IP: UNKNOWN
+Ports: 53
+Action: interrogate DNS records
+Red Boundry Router
+Hostname:
+IP: 172.16.120.1
+Ports: 22
+Username: vyos
+Password: password
+Action: Use as start point and Perform Passive/Active Reconnaissance
+T2
+Hostname: UNKNOWN
+IP: 172.16.182.110
+Action: Perform Active Reconnaissance
+
+T3
+Hostname: UNKNOWN
+IP: 172.16.140.33
+Action: Perform Active Reconnaissance
+
+T4
+Hostname: UNKNOWN
+IP: 172.16.182.106
+Action: Perform Active Reconnaissance
+
+T5
+Hostname: UNKNOWN
+IP: 172.16.182.114
+Action: Perform Active Reconnaissance
+
+T6
+Hostname: UNKNOWN
+IP: 172.16.182.118
+Action: Perform Active Reconnaissance
+
+T7
+Hostname: UNKNOWN
+IP: 172.16.140.35
+Action: Perform Active Reconnaissance
 
