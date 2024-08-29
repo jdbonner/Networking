@@ -1,0 +1,51 @@
+Net Recon Methodology
+
+Host discovery
+ruby ping sweep (if ping available)
+for i in {1..254};do (ping -c 1 192.168.1
+
+
+
+
+
+
+
+
+scan methodology
+
+
+
+
+
+
+
+
+
+
+passive recon methodology
+italizied/bolded words are ommands
+
+hostname
+permissions
+sudo -l
+interfaces and subnets
+ip a
+show interface (VYOS)
+neighbors
+ip neigh
+routing table
+ip route
+show ip route (VYOS)
+files of interest 
+find / -iname flag*
+find / -iname hint*
+other listening ports
+ss -ntlp
+available tools
+which tcpdump wireshark nmap telnet get curl ping
+
+
+
+
+
+
