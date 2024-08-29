@@ -1,5 +1,10 @@
 # Commands
 https://duckduckgo.com/
+VYOS system creds
+vyos
+password
+
+
 
 ## Ping
 - Ping one IP:
@@ -257,7 +262,7 @@ for p in {1..1023}; do(echo >/dev/tcp/172.16.82.106/$p) >/dev/null 2>&1 && echo 
 
 
 
-
+which tcpdump ssh telnet wireshark ping
 
 
 
