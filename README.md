@@ -15,4 +15,5 @@ https://miro.com/app/board/o9J_klSqCSY=/?share_link_id=16133753693
 ## Cyberchef
 https://gchq.github.io/CyberChef/
 
-
+## DuckDuckGo
+https://duckduckgo.com/
