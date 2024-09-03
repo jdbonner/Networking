@@ -187,9 +187,11 @@ server.close()
 
 
 
-
-
-
+```
+ssh -p <optional alt port> <user>@<server ip> -L <local bind port>:<tgt ip>:<tgt port> -NT
+or
+ssh -L <local bind port>:<tgt ip>:<tgt port> -p <alt port> <user>@<server ip> -NT
+```
 
 
 
