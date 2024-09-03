@@ -129,7 +129,7 @@ $ nc 10.10.0.40 1111 < mypipe | nc -lvp 3333 > mypipe
 $ mknod mypipe p
 $ nc -lvp 1111 < mypipe | nc 192.168.1.10 3333 > mypipe
 ```
-
+nc 10.10.0.40 1111 < mypipe | nc -lvp 3333 > mypipe
 ### File Transfer with /dev/tcp
 - On the receiving box:
 ```$ nc -lvp 1111 > devtcpfile.txt```
