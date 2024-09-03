@@ -21,3 +21,7 @@ https://duckduckgo.com/
 ## Mapping
 https://app.diagrams.net/
 > login with your google account
+
+
+> Networking 4 map
+https://app.diagrams.net/#G1rOlJjYc-N7Xz7CH9yxr3SN8qRqqCF36N#%7B%22pageId%22%3A%22niQ329rBeNYas5XyfggN%22%7D
