@@ -505,6 +505,8 @@ Internet_Host:
 ssh student@172.16.1.15 -L 2222:172.16.40.10:22
 or
 ssh -L 2222:172.16.40.10:22 student@172.16.1.15
+```
+```
 Internet_Host:
 ssh student@localhost -p 2222 -D 9050
 or
@@ -529,9 +531,7 @@ proxychains wget -r ftp://172.16.82.106
 https://net.cybbh.io/public/networking/latest/08_tunneling/fg.html#_4_5_3_remote_port_forwarding
 ```
 ssh -p <optional alt port> <user>@<server ip> -R <remote bind port>:<tgt ip>:<tgt port> -NT
-
 or
-
 ssh -R <remote bind port>:<tgt ip>:<tgt port> -p <alt port> <user>@<server ip> -NT
 ```
 
@@ -541,6 +541,8 @@ Blue_DMZ_Host-1:
 ssh student@10.10.0.40 -R 4422:localhost:22
 or
 ssh -R 4422:localhost:22 student@10.10.0.40
+```
+```
 Internet_Host:
 ssh student@localhost -p 4422
 Blue_DMZ_Host-1~$
@@ -556,6 +558,8 @@ Blue_DMZ_Host-1:
 ssh student@10.10.0.40 -R 4423:localhost:23
 or
 ssh -R 4423:localhost:23 student@10.10.0.40
+```
+```
 Internet_Host:
 telnet localhost 4423
 Blue_DMZ_Host-1~$
@@ -571,6 +575,8 @@ Blue_DMZ_Host-1:
 ssh student@10.10.0.40 -R 4480:localhost:80
 or
 ssh -R 4480:localhost:80 student@10.10.0.40
+```
+```
 Internet_Host:
 firefox http://localhost:4480
 {Webpage of Blue_DMZ_Host-1}
@@ -585,6 +591,8 @@ Blue_DMZ_Host-1:
 ssh student@10.10.0.40 -R 5522:172.16.40.10:22
 or
 ssh -R 5522:172.16.40.10:22 student@10.10.0.40
+```
+```
 Internet_Host:
 ssh student@localhost -p 5522
 Blue_INT_DMZ_Host-1~$
@@ -599,6 +607,8 @@ Blue_DMZ_Host-1:
 ssh student@10.10.0.40 -R 5523:172.16.40.10:23
 or
 ssh -R 5523:172.16.40.10:23 student@10.10.0.40
+```
+```
 Internet_Host:
 telnet localhost 5523
 Blue_INT_DMZ_Host-1~$
@@ -613,6 +623,8 @@ Blue_DMZ_Host-1:
 ssh student@10.10.0.40 -R 5580:172.16.40.10:80
 or
 ssh -R 5580:172.16.40.10:80 student@10.10.0.40
+```
+```
 Internet_Host:
 firefox http://localhost:5580
 {Webpage of Blue_INT_DMZ_Host-1}
@@ -632,6 +644,8 @@ Internet_Host:
 ssh student@172.16.1.15 -L 2223:172.16.40.10:23 -NT
 or
 ssh -L 2223:172.16.40.10:23 student@172.16.1.15 -NT
+```
+```
 Internet_Host:
 telnet localhost 2223
 Blue_INT_DMZ_Host-1~$
