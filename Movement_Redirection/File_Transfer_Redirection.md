@@ -416,21 +416,76 @@ server.close()
 ```
 
 
+## Understanding Packing and Encoding
+https://net.cybbh.io/public/networking/latest/09_file_transfer/fg.html#_9_4_understanding_packing_and_encoding
+- Discuss the purpose of packers
+- Perform Hexadecimal encoding and decoding
+- Demonstrate Base64 encoding and decoding
+- Conduct file transfers with Base64
+
+### Packers
+- Special code added to programs to compress executables
+- Reduces network traffic
+- Used for obfuscation
+- Reduces time on target
+- Example: UPX
 
 
+### Encoding and Decoding
+- Specialized formatting
+- Used for transmission and storage
+- Hex and Base64 are the most common
+- NOT Compression
+- NOT Encapsulation
+- NOT Encryption
+
+### Hexadecimal Encoding and Decoding
+- Converts the binary representation of a data set to the 2 digit base-16 equivalent.
+- Used by IPv6 and MAC addresses
+- Color schemes
+- Increases readability and information density
+
+### xxd example
+- echo a string of text and use xxd to convert it to a plain hex dump with the -p switch\
+```
+$ echo "Hex encoding test" | xxd -p
+48657820656e636f64696e6720746573740a
+```
+- echo hex string and use xxd to restore the data to its original format
+```
+$ echo "48657820656e636f64696e6720746573740a" | xxd -r -p
+Hex encoding test
+```
+
+### Base64 Encoding and Decoding
+- binary-to-text encoding
+- A-Z, a-z, 1-9, +, /
+- 6 bits per non-final digit
+- (4) 6-bit groups per (3) 8-bit groups
+- padding used to fill in any unused space in each 24-bit group
 
 
+### Base64 conversion chart
+![](https://git.cybbh.space/net/public/raw/master/modules/networking/slides-v4/images/base64chart.PNG)
 
 
+### ASCII to Base64 conversion example
+![](https://git.cybbh.space/net/public/raw/master/modules/networking/slides-v4/images/asciitobase64conversion.PNG)
+
+### Transfer file with Base64
+- generate the base64 output of a file, with line wrapping removed
+```$ base64 -w0 logoCyber.png```
+- copy the output
 
 
-
-
-
-
-
-
-
+### Transfer file with Base64
+- create a new file on your machine
+```
+$ nano b64image.png
+paste, save & exit
+```
+- decode from base64 with -d
+```$ base64 -d b64image.png > logoCyber.png```
 
 
 
