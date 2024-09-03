@@ -17,3 +17,7 @@ https://gchq.github.io/CyberChef/
 
 ## DuckDuckGo
 https://duckduckgo.com/
+
+## Mapping
+https://app.diagrams.net/
+> login with your google account
