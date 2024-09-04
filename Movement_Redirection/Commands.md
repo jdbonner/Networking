@@ -1,6 +1,14 @@
 # Commands
 
 
+find / -name hint* 2> /dev/null
+
+find / -name flag* 2> /dev/null
+ss -ntlp
+
+
+
+
 - mknod                                                              # make a node in memory. needed for named pipes in netcat two way tunnel
 - mknod mypipe p                                                     # Example of a node
 - nc -lvp 10.0.0.1:1111 < mypipe | nc -lvp 10.0.0.2:3333 > mypipe    # Example to direct connect the two devices with a netcat relay
