@@ -1,0 +1,71 @@
+You are on this workstation as Jose Cuervo, a local strongman. 
+You have the ability to execute commands on this Pineland workstation as an actor for Pineland. 
+Jose has a friend in Atropia that has provided him with the ability to SSH to the Allies' pivot point.
+You (Jose) should look into providing intel on other interesting workstations in the area controlled by Keith Mohammand, a wanted terrorist. 
+Those workstations are not directly reachable from Atropia, but are on the same subnet as Jose's workstation which may be used to exfiltrate information. 
+Jose also has a flag that can be found by using the find command on his system. The directory where the flag is found has been commonly used throughout the network.
+
+
+
+You have accessed the Atlantica government server. 
+There is nothing interesting on this server, however, it used to have access to the 10.4.0.0/24 and 10.5.0.0/24 networks until the admins shut it down.
+Try to access those networks through another way.
+
+
+
+
+
+
+
+
+
+
+
+us
+10.10.0.40/27
+
+
+
+
+T3 = 10.3.0.10/24
+float = 10.50.41.243
+ssh net2_student4@10.50.41.243
+
+T4 = 10.2.0.1/24
+float = 10.50.39.228
+
+ssh net2_student4@
+
+ssh net2_student4@127.0.0.1 -p 20401
+ssh net2_student4@10.2.0.3
+
+ssh net2_student4@10.3.0.10 -R 20499:127.0.0.1:22 -NT
+ssh net2_student4@10.50.41.243 -L 20401:127.0.0.1:20499 -NT
+ssh net2_student4@127.0.0.1 -p 20401 -L 20402:10.2.0.3:22 -NT
+
+
+
+# closed
+ssh net2_student4@127.0.0.1 -p 20401 -L 20402:10.2.0.2:80 -NT
+
+
+
+
+
+
+
+ssh net2_student4@10.50.41.243 -D 9050 -NT
+
+
+
+
+
+
+
+
+
+
+
+
+ssh -R 4444:localhost:22 cctc@192.168.2.1 -NT
+
