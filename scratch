@@ -1,3 +1,8 @@
+7
+8  
+9  SSH-TRANS
+10  10.10.0.40
+11  172.16.82.106
 You are on this workstation as Jose Cuervo, a local strongman. 
 You have the ability to execute commands on this Pineland workstation as an actor for Pineland. 
 Jose has a friend in Atropia that has provided him with the ability to SSH to the Allies' pivot point.
@@ -13,11 +18,8 @@ Try to access those networks through another way.
 
 
 
-
-
-
-
-
+You have accessed tunnels-training-baja-republic-pivot at  via login. Good job. 
+There are no other devices of interest in this subnet, but this device has access to another network that only it can access. Give it a try!
 
 
 
@@ -39,11 +41,15 @@ ssh net2_student4@
 ssh net2_student4@127.0.0.1 -p 20401
 ssh net2_student4@10.2.0.3
 
+# current tunnels
 ssh net2_student4@10.3.0.10 -R 20499:127.0.0.1:22 -NT
 ssh net2_student4@10.50.41.243 -L 20401:127.0.0.1:20499 -NT
+
 ssh net2_student4@127.0.0.1 -p 20401 -L 20402:10.2.0.3:22 -NT
 
-
+# moving tunnels for mojave
+ssh net2_student4@10.50.41.243 -L 20403:10.4.0.1:22 -NT
+ssh net2_student4@127.0.0.1 -p 20403 -L 20404:10.5.0.1:22 -NT
 
 # closed
 ssh net2_student4@127.0.0.1 -p 20401 -L 20402:10.2.0.2:80 -NT
@@ -62,10 +68,45 @@ ssh net2_student4@10.50.41.243 -D 9050 -NT
 
 
 
-
-
-
-
-
 ssh -R 4444:localhost:22 cctc@192.168.2.1 -NT
+
+
+
+
+
+
+
+
+
+
+
+
+net2_student4@
+ssh net2_student4@127.0.0.1 -p -D 9050 -NT
+
+
+
+ssh net2_student4@10.10.0.40 -R 20489:127.0.0.1:22 -NT
+
+
+ssh net2_student4@127.0.0.1 -p 20489 -L 20488:10.1.2.18:2222 -NT
+ssh net2_student4@127.0.0.1 -p 20488 -L 20487:172.16.10.121:2323 -NT
+ssh net2_student4@127.0.0.1 -p 20487 -L 20486:192.168.10.69:22 -NT
+
+
+
+
+
+
+ssh net2_student4@127.0.0.1 -p 2048X -D 9050 -NT
+
+
+
+
+
+
+
+
+
+
 
