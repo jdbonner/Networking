@@ -23,9 +23,34 @@ There are no other devices of interest in this subnet, but this device has acces
 
 
 
+
+
+
+
+
+20:11:03.491298 IP 172.16.0.90 > 172.16.0.100: ICMP echo request, id 855, seq 1, length 64
+	0x0000:  4500 0054 27b8 4000 4001 ba12 ac10 005a  E..T'.@.@......Z
+	0x0010:  ac10 0064 0800 f187 0357 0001 5710 da66  ...d.....W..W..f
+	0x0020:  0000 0000 2d78 0200 0000 0000 badb eef5  ....-x..........
+	0x0030:  badb eef5 badb eef5 badb eef5 badb eef5  ................
+	0x0040:  badb eef5 badb eef5 badb eef5 badb eef5  ................
+	0x0050:  badb eef5                                ....
+20:11:03.491354 IP 172.16.0.100 > 172.16.0.90: ICMP echo reply, id 855, seq 1, length 64
+	0x0000:  4500 0054 8e14 0000 4001 93b6 ac10 0064  E..T....@......d
+	0x0010:  ac10 005a 0000 f987 0357 0001 5710 da66  ...Z.....W..W..f
+	0x0020:  0000 0000 2d78 0200 0000 0000 badb eef5  ....-x..........
+	0x0030:  badb eef5 badb eef5 badb eef5 badb eef5  ................
+	0x0040:  badb eef5 badb eef5 badb eef5 badb eef5  ................
+	0x0050:  badb eef5                                ....
+
+
+
+
+
+
 us
 10.10.0.40/27
-
+10.50.26.79
 
 
 
@@ -35,6 +60,32 @@ ssh net2_student4@10.50.41.243
 
 T4 = 10.2.0.1/24
 float = 10.50.39.228
+
+
+T5 = 192.168.0.10
+float = 10.50.42.86
+
+
+SSH2 = 192.168.0.20/24
+
+net2_comrade4:privet4
+
+# tunnel to SSH2
+ssh student@10.50.26.79 -R 20499:127.0.0.1:22 -NT
+ssh net2_student4@127.0.0.1 -p 20499 -L 20411:192.168.0.20:3333 -NT
+
+
+ssh net2_student4@127.0.0.1 -p 20499 -L 20411:192.168.0.20:3333 -NT
+
+
+#callback to ssh4
+ssh net2_student4@127.0.0.1 -p 20412 -L 20413:172.16.0.60:23 -NT
+ssh net2_student4@192.168.0.40 -p 5555 -R 20498:127.0.0.1:22 -NT
+ssh net2_student4@127.0.0.1 -p 20413 -L 20414:127.0.0.1:20498 -NT
+ssh net2_comrade4@127.0.0.1 -p 20414 -L 20415:172.16.0.90:2222 -NT
+ssh net2_comrade4@127.0.0.1 -p 20415 -L 20416:172.16.0.100:23 -NT
+ssh net2_comrade4@172.16.0.90 -R 20497:127.0.0.1:22 -NT
+ssh net2_comrade4@127.0.0.1 -p 20415 -L 20417:127.0.0.1:20497 -NT
 
 ssh net2_student4@
 
