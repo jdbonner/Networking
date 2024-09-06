@@ -1,4 +1,4 @@
-# command cheat sheet
+# command sheet
 
 
 
