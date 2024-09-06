@@ -1,10 +1,22 @@
 # Commands
 
-
 find / -name hint* 2> /dev/null
-
 find / -name flag* 2> /dev/null
 ss -ntlp
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
