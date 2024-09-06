@@ -1,4 +1,4 @@
-# command sheet
+# SOS tunnel Hellp
 
 ### tunnel to device to send to a alternate port
 - ssh <USER>@<IP-TO-AUTH> -p <PORT-TO-AUTH> -L <PORT-TO-OPEN>:<IP-TO-TARGET>:<PORT-TO-TARGET> -NT
