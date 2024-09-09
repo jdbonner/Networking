@@ -381,7 +381,7 @@ nft { delete | list | flush } chain [family] [table] [chain]
 - NFTables DEMO
 
 
-### Configure iptables nat rules
+## Configure iptables nat rules
 https://net.cybbh.io/public/networking/latest/11_acl/fg.html#_11_2_4_configure_iptables_nat_rules
 
 ### NAT & PAT operators & Chains
