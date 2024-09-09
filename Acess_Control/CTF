@@ -1,0 +1,170 @@
+IPTable Rule Definitions for T1
+Allow New and Established traffic to/from via SSH, TELNET, and RDP
+sudo iptables -A OUTPUT -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A OUTPUT -p tcp --sport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A OUTPUT -p tcp --sport 23 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A OUTPUT -p tcp --dport 23 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A OUTPUT -p tcp --dport 3389 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A OUTPUT -p tcp --sport 3389 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+sudo iptables -A INPUT -p tcp --sport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 23 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A INPUT -p tcp --sport 23 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A INPUT -p tcp --sport 3389 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 3389 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+Change the Default Policy in the Filter Table for the INPUT, OUTPUT, and FORWARD chains to DROP
+sudo iptables -t filter -P INPUT DROP
+sudo iptables -t filter -P OUTPUT DROP
+sudo iptables -t filter -P FORWARD DROP
+
+Allow ping (ICMP) requests (and reply) to and from the Pivot.
+sudo iptables -A INPUT -s 10.10.0.40 -p icmp --icmp-type 8 -j ACCEPT
+sudo iptables -A INPUT -s 10.10.0.40 -p icmp --icmp-type 0 -j ACCEPT
+
+sudo iptables -A OUTPUT -d 10.10.0.40 -p icmp --icmp-type 0 -j ACCEPT
+sudo iptables -A OUTPUT -d 10.10.0.40 -p icmp --icmp-type 8 -j ACCEPT
+
+Allow ports 6579 and 4444 for both udp and tcp traffic
+sudo iptables -A OUTPUT -p tcp -m multiport --ports 6579,4444 -j ACCEPT
+sudo iptables -A OUTPUT -p udp -m multiport --ports 6579,4444 -j ACCEPT
+
+sudo iptables -A INPUT -p tcp -m multiport --ports 6579,4444 -j ACCEPT
+sudo iptables -A INPUT -p udp -m multiport --ports 6579,4444 -j ACCEPT
+
+Allow New and Established traffic to/from via HTTP
+sudo iptables -A INPUT -p tcp --sport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+sudo iptables -A OUTPUT -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A OUTPUT -p tcp --sport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+467accfb25050296431008a1357eacb1
+
+
+
+
+
+IPTable Rule Definitions
+
+Allow New and Established traffic to/from via SSH, TELNET, and RDP
+sudo iptables -A OUTPUT -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A OUTPUT -p tcp --sport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A OUTPUT -p tcp --sport 23 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A OUTPUT -p tcp --dport 23 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A OUTPUT -p tcp --dport 3389 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A OUTPUT -p tcp --sport 3389 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+sudo iptables -A INPUT -p tcp --sport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 23 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A INPUT -p tcp --sport 23 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A INPUT -p tcp --sport 3389 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 3389 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+
+Change the Default Policy in the Filter Table for the INPUT, OUTPUT, and FORWARD chains to DROP
+sudo iptables -t filter -P INPUT DROP
+sudo iptables -t filter -P OUTPUT DROP
+sudo iptables -t filter -P FORWARD DROP
+
+
+
+Allow New and Established traffic to/from via HTTP
+sudo iptables -A INPUT -p tcp --sport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+sudo iptables -A OUTPUT -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A OUTPUT -p tcp --sport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+05e5fb96e2a117e01fc1227f1c4d664c
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+NFTable Rule Definitions
+NFTable: CCTC
+Family: ip
+sudo nft add table ip CCTC
+
+Create input and output base chains with:
+Hooks
+Priority of 0
+Policy as Accept
+sudo nft add chain ip CCTC INPUT { type filter hook input priority 0 \; policy accept \; }
+sudo nft add chain ip CCTC OUTPUT { type filter hook output priority 0 \; policy accept \; }
+
+Allow New and Established traffic to/from via SSH, TELNET, and RDP
+sudo nft add rule ip CCTC INPUT tcp dport { 22, 23, 3389 } ct state { new, established } accept
+sudo nft add rule ip CCTC INPUT tcp sport { 22, 23, 3389 } ct state { new, established } accept
+
+sudo nft add rule ip CCTC OUTPUT tcp sport { 22, 23, 3389 } ct state { new, established } accept
+sudo nft add rule ip CCTC OUTPUT tcp dport { 22, 23, 3389 } ct state { new, established } accept
+
+Change your chains to now have a policy of Drop
+sudo nft add chain ip CCTC INPUT { \; policy drop \; }
+sudo nft add chain ip CCTC OUTPUT { \; policy drop \; }
+
+Allow ping (ICMP) requests (and reply) to and from the Pivot.
+sudo nft add rule ip CCTC INPUT icmp type 0 ip saddr 10.10.0.40 accept
+sudo nft add rule ip CCTC INPUT icmp type 0 ip daddr 10.10.0.40 accept
+sudo nft add rule ip CCTC INPUT icmp type 8 ip daddr 10.10.0.40 accept
+sudo nft add rule ip CCTC INPUT icmp type 8 ip saddr 10.10.0.40 accept
+
+sudo nft add rule ip CCTC OUTPUT icmp type 0 ip daddr 10.10.0.40 accept
+sudo nft add rule ip CCTC OUTPUT icmp type 0 ipAllow New and Established traffic to/from via HTTP
+sudo nft add rule ip CCTC INPUT tcp dport { 80 } ct state { new, established } accept
+sudo nft add rule ip CCTC INPUT tcp sport { 80 } ct state { new, established } accept
+
+sudo nft add rule ip CCTC OUTPUT tcp dport { 80 } ct state { new, established } accept
+sudo nft add rule ip CCTC OUTPUT tcp sport { 80 } ct state { new, established } accept saddr 10.10.0.40 accept
+sudo nft add rule ip CCTC OUTPUT icmp type 8 ip saddr 10.10.0.40 accept
+sudo nft add rule ip CCTC OUTPUT icmp type 8 ip daddr 10.10.0.40 accept
+
+Allow ports 5050 and 5150 for both udp and tcp traffic to/from
+sudo nft add rule ip CCTC INPUT tcp dport { 5050, 5150 } accept
+sudo nft add rule ip CCTC INPUT tcp sport { 5050, 5150 } accept
+sudo nft add rule ip CCTC INPUT udp dport { 5050, 5150 } accept
+sudo nft add rule ip CCTC INPUT udp sport { 5050, 5150 } accept
+
+sudo nft add rule ip CCTC OUTPUT tcp sport { 5050, 5150 } accept
+sudo nft add rule ip CCTC OUTPUT tcp dport { 5050, 5150 } accept
+sudo nft add rule ip CCTC OUTPUT udp sport { 5050, 5150 } accept
+sudo nft add rule ip CCTC OUTPUT udp dport { 5050, 5150 } accept
+
+Allow New and Established traffic to/from via HTTP
+sudo nft add rule ip CCTC INPUT tcp dport { 80 } ct state { new, established } accept
+sudo nft add rule ip CCTC INPUT tcp sport { 80 } ct state { new, established } accept
+
+sudo nft add rule ip CCTC OUTPUT tcp dport { 80 } ct state { new, established } accept
+sudo nft add rule ip CCTC OUTPUT tcp sport { 80 } ct state { new, established } accept
+
+
+9f7a33941828bdafd2755fd20176cdf4
+
+
+
+
+
+
+Validation
+d3b88e04de1e76482a1972f36734a7d8
+
+
+nat
+0c2ca80fad4accccce3bcecec1d238ce
+be33fe60229f8b8ee22931a3820d30ac
+e4f4c65b3884eadf7986adc76caea32c
