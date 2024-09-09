@@ -1,25 +1,54 @@
-7
-8  
-9  SSH-TRANS
-10  10.10.0.40
-11  172.16.82.106
-You are on this workstation as Jose Cuervo, a local strongman. 
-You have the ability to execute commands on this Pineland workstation as an actor for Pineland. 
-Jose has a friend in Atropia that has provided him with the ability to SSH to the Allies' pivot point.
-You (Jose) should look into providing intel on other interesting workstations in the area controlled by Keith Mohammand, a wanted terrorist. 
-Those workstations are not directly reachable from Atropia, but are on the same subnet as Jose's workstation which may be used to exfiltrate information. 
-Jose also has a flag that can be found by using the find command on his system. The directory where the flag is found has been commonly used throughout the network.
+Cyberspace Active Defense (CAD)
+XX OCT 2023
+Start Time: 1300
+Duration: 4 hours
+
+Type of Operation: Cyberspace Defense Design and Implementation
+
+Objective: Due to the increase in attacks and all the work performed in support of the Gorgas Cyberspace Operations, your team has been assigned to develop a defensive strategy for implementation, and will implement signature based protections across their network and harden the host-level network protections. Once the measures are in place for each task, you will be required to demonstrate that they are functioning and normal traffic is still authorized.
+
+Scenario Credentials: FLAG = i_am_filtering_your_noise
+
+---------------------------------------------------------------------------------------------------------
+
+
+Task 1
+IPTables/NFTables - Host Filtering
+
+You are required to Setup and Test all Rules, prior to implementing any DROP Policy as you may lose connection if improperly configured. Notify Mission Command(Instructor) if connections are dropped.
+
+IPTable Rule Definitions for T1
+Allow New and Established traffic to/from via SSH, TELNET, and RDP
+sudo iptables -A OUTPUT -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A OUTPUT -p tcp --sport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A OUTPUT -p tcp --sport 23 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A OUTPUT -p tcp --dport 23 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A OUTPUT -p tcp --dport 3389 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A OUTPUT -p tcp --sport 3389 -m state --state NEW,ESTABLISHED -j ACCEPT
 
 
 
-You have accessed the Atlantica government server. 
-There is nothing interesting on this server, however, it used to have access to the 10.4.0.0/24 and 10.5.0.0/24 networks until the admins shut it down.
-Try to access those networks through another way.
+sudo iptables -A INPUT -p tcp --sport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 23 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A INPUT -p tcp --sport 23 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A INPUT -p tcp --sport 3389 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 3389 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+
+Change the Default Policy in the Filter Table for the INPUT, OUTPUT, and FORWARD chains to DROP
+sudo iptables -t filter -P INPUT DROP
+sudo iptables -t filter -P OUTPUT DROP
+sudo iptables -t filter -P FORWARD DROP
 
 
 
-You have accessed tunnels-training-baja-republic-pivot at  via login. Good job. 
-There are no other devices of interest in this subnet, but this device has access to another network that only it can access. Give it a try!
+Allow ping (ICMP) requests (and reply) to and from the Pivot.
+sudo iptables -A INPUT -s 10.10.0.40 -p icmp --icmp-type 8 -j ACCEPT
+sudo iptables -A INPUT -s 10.10.0.40 -p icmp --icmp-type 0 -j ACCEPT
+
+sudo iptables -A OUTPUT -d 10.10.0.40 -p icmp --icmp-type 0 -j ACCEPT
+sudo iptables -A OUTPUT -d 10.10.0.40 -p icmp --icmp-type 8 -j ACCEPT
 
 
 
@@ -28,23 +57,393 @@ There are no other devices of interest in this subnet, but this device has acces
 
 
 
-20:11:03.491298 IP 172.16.0.90 > 172.16.0.100: ICMP echo request, id 855, seq 1, length 64
-	0x0000:  4500 0054 27b8 4000 4001 ba12 ac10 005a  E..T'.@.@......Z
-	0x0010:  ac10 0064 0800 f187 0357 0001 5710 da66  ...d.....W..W..f
-	0x0020:  0000 0000 2d78 0200 0000 0000 badb eef5  ....-x..........
-	0x0030:  badb eef5 badb eef5 badb eef5 badb eef5  ................
-	0x0040:  badb eef5 badb eef5 badb eef5 badb eef5  ................
-	0x0050:  badb eef5                                ....
-20:11:03.491354 IP 172.16.0.100 > 172.16.0.90: ICMP echo reply, id 855, seq 1, length 64
-	0x0000:  4500 0054 8e14 0000 4001 93b6 ac10 0064  E..T....@......d
-	0x0010:  ac10 005a 0000 f987 0357 0001 5710 da66  ...Z.....W..W..f
-	0x0020:  0000 0000 2d78 0200 0000 0000 badb eef5  ....-x..........
-	0x0030:  badb eef5 badb eef5 badb eef5 badb eef5  ................
-	0x0040:  badb eef5 badb eef5 badb eef5 badb eef5  ................
-	0x0050:  badb eef5                                ....
+
+Allow ports 6579 and 4444 for both udp and tcp traffic
+sudo iptables -A OUTPUT -p tcp -m multiport --ports 6579,4444 -j ACCEPT
+sudo iptables -A OUTPUT -p udp -m multiport --ports 6579,4444 -j ACCEPT
+
+sudo iptables -A INPUT -p tcp -m multiport --ports 6579,4444 -j ACCEPT
+sudo iptables -A INPUT -p udp -m multiport --ports 6579,4444 -j ACCEPT
 
 
 
+
+sudo iptables -A OUTPUT -p tcp --dport 22 -j ACCEPT
+sudo iptables -A OUTPUT -p tcp --sport 22 -j ACCEPT
+
+sudo iptables -A INPUT -p tcp --sport 22 -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+
+
+
+
+
+
+-p tcp -m multiport --ports 6579,4444 -j ACCEPT
+-p udp -m multiport --ports 6579,4444 -j ACCEPT
+
+
+Allow New and Established traffic to/from via HTTP
+sudo iptables -A INPUT -p tcp --sport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+sudo iptables -A OUTPUT -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A OUTPUT -p tcp --sport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+
+
+
+
+
+IPTable Rule Definitions
+
+Allow New and Established traffic to/from via SSH, TELNET, and RDP
+sudo iptables -A OUTPUT -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A OUTPUT -p tcp --sport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A OUTPUT -p tcp --sport 23 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A OUTPUT -p tcp --dport 23 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A OUTPUT -p tcp --dport 3389 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A OUTPUT -p tcp --sport 3389 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+sudo iptables -A INPUT -p tcp --sport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 23 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A INPUT -p tcp --sport 23 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A INPUT -p tcp --sport 3389 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 3389 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+
+Change the Default Policy in the Filter Table for the INPUT, OUTPUT, and FORWARD chains to DROP
+sudo iptables -t filter -P INPUT DROP
+sudo iptables -t filter -P OUTPUT DROP
+sudo iptables -t filter -P FORWARD DROP
+
+
+
+Allow New and Established traffic to/from via HTTP
+sudo iptables -A INPUT -p tcp --sport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+sudo iptables -A OUTPUT -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A OUTPUT -p tcp --sport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+
+NFTable Rule Definitions
+NFTable: CCTC
+Family: ip
+sudo nft add table ip CCTC
+
+
+Create input and output base chains with:
+Hooks
+Priority of 0
+Policy as Accept
+sudo nft add chain ip CCTC INPUT { type filter hook input priority 0 \; policy accept \; }
+sudo nft add chain ip CCTC OUTPUT { type filter hook output priority 0 \; policy accept \; }
+
+
+Allow New and Established traffic to/from via SSH, TELNET, and RDP
+sudo nft add rule ip CCTC INPUT tcp dport { 22, 23, 3389 } ct state { new, established } accept
+sudo nft add rule ip CCTC INPUT tcp sport { 22, 23, 3389 } ct state { new, established } accept
+
+sudo nft add rule ip CCTC OUTPUT tcp sport { 22, 23, 3389 } ct state { new, established } accept
+sudo nft add rule ip CCTC OUTPUT tcp dport { 22, 23, 3389 } ct state { new, established } accept
+
+
+
+sudo nft insert rule ip CCTC INPUT tcp dport 22 accept
+sudo nft add rule ip CCTC INPUT tcp dport { 6010, 6011, 6012 } ct state { new, established } accept
+
+
+
+
+Change your chains to now have a policy of Drop
+sudo nft add chain ip CCTC INPUT { \; policy drop \; }
+sudo nft add chain ip CCTC OUTPUT { \; policy drop \; }
+
+
+
+nft add chain [family] [table] [chain] { \; policy [policy] \;}
+
+
+
+
+Allow ping (ICMP) requests (and reply) to and from the Pivot.
+sudo nft add rule ip CCTC INPUT icmp type 0 ip saddr 10.10.0.40 accept
+sudo nft add rule ip CCTC INPUT icmp type 0 ip daddr 10.10.0.40 accept
+sudo nft add rule ip CCTC INPUT icmp type 8 ip daddr 10.10.0.40 accept
+sudo nft add rule ip CCTC INPUT icmp type 8 ip saddr 10.10.0.40 accept
+
+sudo nft add rule ip CCTC OUTPUT icmp type 0 ip daddr 10.10.0.40 accept
+sudo nft add rule ip CCTC OUTPUT icmp type 0 ip saddr 10.10.0.40 accept
+sudo nft add rule ip CCTC OUTPUT icmp type 8 ip saddr 10.10.0.40 accept
+sudo nft add rule ip CCTC OUTPUT icmp type 8 ip daddr 10.10.0.40 accept
+
+
+
+
+nft add rule ip CCTC INPUT icmp type 0 accept
+nft add rule ip CCTC INPUT icmp type 8 accept
+nft add rule ip CCTC OUTPUT icmp type 0 accept
+nft add rule ip CCTC OUTPUT icmp type 8 accept
+sudo nft add rule ip CCTC INPUT ip saddr 172.16.40.10 accept
+add rule ip nat prerouting dnat tcp dport map {\ 80 : 192.168.1.100, 8888 : 192.168.1.101 }
+
+
+
+Allow ports 5050 and 5150 for both udp and tcp traffic to/from
+sudo nft add rule ip CCTC INPUT tcp dport { 5050, 5150 } accept
+sudo nft add rule ip CCTC INPUT tcp sport { 5050, 5150 } accept
+sudo nft add rule ip CCTC INPUT udp dport { 5050, 5150 } accept
+sudo nft add rule ip CCTC INPUT udp sport { 5050, 5150 } accept
+
+sudo nft add rule ip CCTC OUTPUT tcp sport { 5050, 5150 } accept
+sudo nft add rule ip CCTC OUTPUT tcp dport { 5050, 5150 } accept
+sudo nft add rule ip CCTC OUTPUT udp sport { 5050, 5150 } accept
+sudo nft add rule ip CCTC OUTPUT udp dport { 5050, 5150 } accept
+
+
+Allow New and Established traffic to/from via HTTP
+sudo nft add rule ip CCTC INPUT tcp dport { 80 } ct state { new, established } accept
+sudo nft add rule ip CCTC INPUT tcp sport { 80 } ct state { new, established } accept
+
+sudo nft add rule ip CCTC OUTPUT tcp dport { 80 } ct state { new, established } accept
+sudo nft add rule ip CCTC OUTPUT tcp sport { 80 } ct state { new, established } accept
+
+
+
+
+
+IPTable Rule Definitions
+
+On T1 edit the /proc/sys/net/ipv4/ip_forward file to enable IP Forwarding. Change the value from 0 to 1.
+
+On T1 change the FORWARD policy back to ACCEPT.
+sudo iptables -t filter -P FORWARD ACCEPT
+
+Configure POSTROUTING chain to translate T5 IP address to T1 (Create the rule by specifying the Interface information first then Layer 3)
+
+
+sudo iptables -t nat -A POSTROUTING -o eth0 -s 192.168.1.10 -j SNAT --to 172.16.82.106
+
+
+
+NFTable Rule Definitions
+
+NFTable: NAT
+Family: ip
+sudo nft add table ip NAT
+
+On T2 edit the /proc/sys/net/ipv4/ip_forward file to enable IP Forwarding. Change the value from 0 to 1.
+
+Create POSTROUTING and PREROUTING base chains with:
+Hooks
+Priority of 0
+No Policy Needed
+sudo nft add chain ip NAT POSTROUTING { type nat hook postrouting priority 0 \; }
+sudo nft add chain ip NAT PREROUTING { type nat hook prerouting priority 0 \; }
+nft add chain ip NAT PREROUTING {type nat hook prerouting priority 0 \; }
+
+Configure POSTROUTING chain to translate T6 IP address to T2 (Create the rule by specifying the Interface information first then Layer 3)
+sudo nft add rule ip NAT POSTROUTING ip saddr 192.168.3.30 oif eth0 snat 172.16.82.112
+
+
+
+"0c2ca80fad4accccce3bcecec1d238ce_be33fe60229f8b8ee22931a3820d30ac"
+
+
+e4f4c65b3884eadf7986adc76caea32c
+
+
+
+
+
+
+
+
+
+
+
+internet host
+10.10.0.40
+T1
+172.16.82.106
+T3
+172.16.40.10
+T2
+172.16.82.112
+T5
+192.168.1.10
+T6
+192.168.3.30
+sudo iptables -t INPUT -A 
+iptables -t [table] -A [chain] [rules] -j [action]
+
+sudo iptables -A INPUT -p tcp --dport 22 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT -p tcp -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -p tcp -m state --state NEW,ESTABLISHED -j ACCEPT
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+IPTable Rule Definitions for T3
+
+NFTable Rule Definitions for T2
+
+Validation of IPTables and NFTables
+
+---------------------------------------------------------------------------------------------------------
+
+
+Task 2
+IPTables/NFTables - NAT
+
+You are required to establishing NAT policies for T5 and T6 through the respective BLUE_HOST's they are attached to.
+
+Prepare T1 for NAT Configurations
+
+Change the Default Policy in the Filter Table for the INPUT, OUTPUT, and FORWARD chains to ACCEPT
+
+Flush your current iptables rules.
+
+Temporarily enable IPv4 forwarding using the /proc/sys/net/ipv4/ip_forward file
+
+Prepare T5 for NAT Configurations
+
+Ensure there is a Default GW entry present for 192.168.1.1
+
+You can use sudo ip route replace default via 192.168.1.1
+
+
+Prepare T2 for NAT Configurations
+
+Change your chains to now have a policy of Accept
+
+Flush your current nftables rules.
+
+Temporarily enable IPv4 forwarding using the /proc/sys/net/ipv4/ip_forward file
+
+Prepare T6 for NAT Configurations
+
+Ensure there is a Default GW entry present for 192.168.3.1
+
+You can use sudo ip route replace default via 192.168.3.1
+
+
+---------------------------------------------------------------------------------------------------------
+
+
+Task 3
+Signatures
+
+Gorgan Cyber Forces have captured targeted traffic related to specific Indicators of Compromise (IOCs) relating to Donovian Actors. They have stored the Traffic Capture on the Pivot:
+
+/home/activity_resources/pcaps/ids.pcap
+
+They have also provided the following syntax for utilizing Snort, their implemented IDS Signature solution:
+
+To Capture traffic over the network using Snort:
+sudo snort -D -i eth0 -l /var/log/snort/ -c /etc/snort/snort.conf
+Use Snort signatures against a pcap:
+sudo snort -r /home/activity_resources/pcaps/ids.pcap -c snort.rule
+---------------------------------------------------------------------------------------------------------
+
+Tools/Techniques: Wireshark, TCPDump, Open Source Research (OSR)
+
+Prior Approvals: The Gorgan Government has mandated that all protections are required to be tested and validated prior to Droping and/or Blocking any traffic. Seek any clarifying guidance from Mission Command(Instructor), and ensure approval is received prior to moving between the different tasks.
+
+Scheme of Maneuver:
+Task 1
+> Linux Ops Station
+→ INTERNET_HOST
+-→ BLUE_Host-1
+-→ BLUE_Host-3
+-→ BLUE_INT_DMZ_HOST-1
+
+Target Section:
+
+Pivot
+Hostname: INTERNET_HOST
+IP: 10.10.0.40 (Use the provided floating IP only for login from outside of the network
+Creds: PROVIDED CREDENTIALS
+Action: Utilize to Pivot into Gorgan Cyberspace and test filters & Rules
+
+T1
+Hostname: BLUE_Host-1
+IP: 172.16.82.106
+Creds: student : password
+Action: Implement Host Filtering to Allow and Restrict Communications and Traffic
+
+T2
+Hostname: BLUE_Host-3
+IP: 172.16.82.112
+Creds: student : password
+Action: Implement Host Filtering to Allow and Restrict Communications and Traffic
+
+T3
+Hostname: BLUE_INT_DMZ_HOST-1
+IP: 172.16.40.10
+Creds: student : password
+Action: Implement Host Filtering to Allow and Restrict Communications and Traffic
+
+T4
+Hostname: (Will be provided by Mission Command)
+IP: 10.50.XXX.XXX (Will be Provided by Mission Command)
+creds: studentX:passwordX (X = Student Number)
+Known Ports: Unknown
+Action: Interrogate Target and validate Signatures
+
+T5
+Hostname: BLUE_PRIV_HOST-1
+IP: 192.168.1.10
+creds: student : password
+Action: Allow traffic through NAT Capabilities
+
+T6
+Hostname: BLUE_PRIV_HOST-3
+IP: 192.168.3.30
+creds: student : password
+Action: Allow traffic through NAT Capabilities
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Task 1 IP/NFTables - Host Filtering: T@bl3sth@tF1lt3r
+
+Task 2 IP/NFTables - NAT: N@tF1lt3rsf0rL1f3
 
 
 
@@ -57,6 +456,33 @@ us
 
 bender
 10.50.38.13
+
+Eric 10.50.23.236
+net2_student4
+
+#After telnetting into the first box, you need to remote back to open ssh
+ssh student@10.50.26.79 -p22 -R 20479:127.0.0.1:8462 -NT
+
+#this sets up a tunnel to send to kenny on 22
+ssh net2_student4@127.0.0.1 -p 20479 -L 20431:192.168.100.60:22 -NT
+#this sets up a tunnel through kenny to kyle on 6481
+ssh net2_student4@127.0.0.1 -p 20431 -L 20432:10.90.50.140:6481 -NT
+#this sets up a tunnel on kyle to forward telnet traffic to stan
+ssh net2_student4@127.0.0.1 -p 20432 -L 20433:172.20.21.5:23 -NT
+#this sets up a port on kyle to connect stan and kyle ssh through firewall
+ssh net2_student4@172.20.21.4 -p 6481 -R 20478:127.0.0.1:22 -NT
+#this connects the ports on kyle to allow you to ssh directly to stan
+ssh net2_student4@127.0.0.1 -p 20432 -L 20434:172.20.21.5:22 -NT
+
+#this is your dynamic tunnel to step through the networks as needed.
+ssh net2_student4@127.0.0.1 -p 20479 -D 9050 -NT
+
+
+
+
+
+
+
 
 
 ssh net2_student4@10.50.38.13 -p 1234 -L 20421:172.17.17.28:23 -NT
@@ -83,6 +509,7 @@ ssh net2_student4@127.0.0.1 -p 20413 -L 20414:127.0.0.1:20498 -NT
 
 
 
+ssh net2_student4@127.0.0.1 -p 20479 -D 9050 -NT
 
 
 
