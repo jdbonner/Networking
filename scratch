@@ -299,11 +299,38 @@ e4f4c65b3884eadf7986adc76caea32c
 
 
 
+To run snort as a Daemon
+sudo snort -D -c /etc/snort/snort.conf -l /var/log/snort
+
+To run snort against a PCAP
+sudo snort -c /etc/snort/rules/file.rules -r file.pcap
+
+Look for anonymous ftp traffic:
+alert tcp any any -> any 21 (msg:"Anonymous FTP Login"; content: "anonymous";
+sid:2121; )
+
+This will cause the pattern matcher to start looking at byte 6 in the payload)
+alert tcp any any -> any 21 (msg:"Anonymous FTP Login"; content: "anonymous"; offset:5; sid:2121; )
+
+
+This will search the first 14 bytes of the packet looking for the word “anonymous”.
+alert tcp any any -> any 21 (msg:"Anonymous FTP Login"; content: "anonymous"; depth:14; sid:2121; )
+
+Deactivates the case sensitivity of a text search.
+alert tcp any any -> any 21 (msg:"Anonymous FTP Login"; content: "anonymous"; nocase; sid:2121; )
 
 
 
+ICMP ping sweep
+alert icmp any any -> 10.10.0.40 any (msg: "NMAP ping sweep Scan"; dsize:0; itype:8; icode:0; sid:10000004; rev: 1; )
 
 
+Look for a specific set of Hex bits (NoOP sled)
+alert tcp any any -> any any (msg:"NoOp sled"; content: "|9090 9090 9090|"; sid:9090; rev: 1; )
+
+
+Telnet brute force login attempt
+alert tcp any 23 -> any any (msg:"TELNET login incorrect"; content:"Login incorrect"; nocase; flow:established, from_server; threshold: type both, track by_src, count 3, seconds 30; classtype: bad-unknown; sid:2323; rev:6; )
 
 
 
