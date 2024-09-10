@@ -33,9 +33,6 @@
 
 
 
-
-
-
 IPTable Rule Definitions for T1
 Allow New and Established traffic to/from via SSH, TELNET, and RDP
 sudo iptables -A OUTPUT -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
@@ -243,7 +240,11 @@ sudo iptables -t filter -P FORWARD ACCEPT
 Configure POSTROUTING chain to translate T5 IP address to T1 (Create the rule by specifying the Interface information first then Layer 3)
 
 
-sudo iptables -t nat -A POSTROUTING -o eth0 -s 192.168.1.10 -j SNAT --to 172.16.82.106
+
+
+
+
+sudo iptables -t filter -P FORWARD ACCEPT
 
 
 
@@ -334,6 +335,66 @@ alert tcp any 23 -> any any (msg:"TELNET login incorrect"; content:"Login incorr
 
 
 
+
+
+TART FLAG: this_whole_ids_is_out_of_line
+
+
+T4 Snort Server (Bob): 10.50.23.232
+
+
+Login Credentials: netN_studentX:passwordX (N=net number and X=student number)
+
+
+Alt SSH Port: 25
+
+
+* DO NOT CREATE YOUR RULES ON THIS SYSTEM *
+
+
+
+Gorgan Cyber Forces have captured targeted traffic related to specific Indicators of Compromise (IOCs) relating to Donovian Actors. They have stored the Traffic Capture on the Pivot:
+
+/home/activity_resources/pcaps/ids.pcap
+
+They have also provided the following syntax for utilizing Snort, their implemented IDS Signature solution:
+
+To Capture traffic over the network using Snort:
+sudo snort -D -i eth0 -l /var/log/snort/ -c /etc/snort/snort.conf
+Use Snort signatures against a pcap:
+sudo snort -r /home/activity_resources/pcaps/ids.pcap -c snort.rule
+
+
+
+
+10.0.0.0/8
+tcp 139 445
+udp 137
+
+
+alert tcp any any -> 192.168.65.20 3389 (msg: "Cows"; sid:1000004;)
+alert udp any any -> 192.168.65.20 3389 (msg: "Cows"; sid:1000005;)
+
+
+
+
+alert tcp any any -> 10.0.0.0/8 [139,445] (msg: "Cows"; sid:1000006;)
+alert udp any any -> 10.0.0.0/8 [137,138] (msg: "Cows"; sid:1000007;)
+
+
+
+
+
+alert tcp any any -> 10.3.0.0/24 any (msg:"cows";flags:0;sid:1000006;)
+
+
+
+
+
+
+alert icmp any any -> 10.3.0.0/24 any (msg:"DMZ Ping";itype:8;icode:0;sid:10000002;)
+
+alert tcp any any -> any 22 (msg:"SSH login incorrect";threshold: type both, track by_src, count 3, seconds 10;sid:1000003;)
 
 
 
@@ -429,6 +490,7 @@ Hostname: BLUE_PRIV_HOST-3
 IP: 192.168.3.30
 creds: student : password
 Action: Allow traffic through NAT Capabilities
+
 
 
 
