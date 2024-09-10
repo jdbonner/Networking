@@ -1,21 +1,40 @@
-Cyberspace Active Defense (CAD)
-XX OCT 2023
-Start Time: 1300
-Duration: 4 hours
-
-Type of Operation: Cyberspace Defense Design and Implementation
-
-Objective: Due to the increase in attacks and all the work performed in support of the Gorgas Cyberspace Operations, your team has been assigned to develop a defensive strategy for implementation, and will implement signature based protections across their network and harden the host-level network protections. Once the measures are in place for each task, you will be required to demonstrate that they are functioning and normal traffic is still authorized.
-
-Scenario Credentials: FLAG = i_am_filtering_your_noise
-
----------------------------------------------------------------------------------------------------------
 
 
-Task 1
-IPTables/NFTables - Host Filtering
 
-You are required to Setup and Test all Rules, prior to implementing any DROP Policy as you may lose connection if improperly configured. Notify Mission Command(Instructor) if connections are dropped.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 IPTable Rule Definitions for T1
 Allow New and Established traffic to/from via SSH, TELNET, and RDP
@@ -264,6 +283,39 @@ e4f4c65b3884eadf7986adc76caea32c
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 internet host
 10.10.0.40
 T1
@@ -276,74 +328,6 @@ T5
 192.168.1.10
 T6
 192.168.3.30
-sudo iptables -t INPUT -A 
-iptables -t [table] -A [chain] [rules] -j [action]
-
-sudo iptables -A INPUT -p tcp --dport 22 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
-iptables -A INPUT -p tcp -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A OUTPUT -p tcp -m state --state NEW,ESTABLISHED -j ACCEPT
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-IPTable Rule Definitions for T3
-
-NFTable Rule Definitions for T2
-
-Validation of IPTables and NFTables
-
----------------------------------------------------------------------------------------------------------
-
-
-Task 2
-IPTables/NFTables - NAT
-
-You are required to establishing NAT policies for T5 and T6 through the respective BLUE_HOST's they are attached to.
-
-Prepare T1 for NAT Configurations
-
-Change the Default Policy in the Filter Table for the INPUT, OUTPUT, and FORWARD chains to ACCEPT
-
-Flush your current iptables rules.
-
-Temporarily enable IPv4 forwarding using the /proc/sys/net/ipv4/ip_forward file
-
-Prepare T5 for NAT Configurations
-
-Ensure there is a Default GW entry present for 192.168.1.1
-
-You can use sudo ip route replace default via 192.168.1.1
-
-
-Prepare T2 for NAT Configurations
-
-Change your chains to now have a policy of Accept
-
-Flush your current nftables rules.
-
-Temporarily enable IPv4 forwarding using the /proc/sys/net/ipv4/ip_forward file
-
-Prepare T6 for NAT Configurations
-
-Ensure there is a Default GW entry present for 192.168.3.1
-
-You can use sudo ip route replace default via 192.168.3.1
-
-
----------------------------------------------------------------------------------------------------------
 
 
 Task 3
@@ -363,7 +347,8 @@ sudo snort -r /home/activity_resources/pcaps/ids.pcap -c snort.rule
 
 Tools/Techniques: Wireshark, TCPDump, Open Source Research (OSR)
 
-Prior Approvals: The Gorgan Government has mandated that all protections are required to be tested and validated prior to Droping and/or Blocking any traffic. Seek any clarifying guidance from Mission Command(Instructor), and ensure approval is received prior to moving between the different tasks.
+Prior Approvals: The Gorgan Government has mandated that all protections are required to be tested and validated prior to Droping and/or Blocking any traffic. 
+Seek any clarifying guidance from Mission Command(Instructor), and ensure approval is received prior to moving between the different tasks.
 
 Scheme of Maneuver:
 Task 1
@@ -450,6 +435,47 @@ Task 2 IP/NFTables - NAT: N@tF1lt3rsf0rL1f3
 us
 10.10.0.40/27
 10.50.26.79
+
+
+
+
+Sterling    >22
+1. ssh net2_student4@10.50.38.17 -L 20421:10.1.2.200:23 -NT
+3. ssh net2_student4@10.50.38.17 -L 20423:127.0.0.1:20468 -NT
+
+Lana        >20423
+2. ssh net2_student4@10.1.2.130 -R 20468:127.0.0.1:8976 -NT
+4. ssh net2_student4@127.0.0.1 -p 20423 -L 20424:10.2.5.20:22 -NT
+
+Cheryl      >20424
+5. ssh net2_student4@127.0.0.1 -p 20424 -L 20425:10.3.9.39:23 -NT
+7. ssh net2_student4@127.0.0.1 -p 20424 -L 20426:127.0.0.1:20467 -NT
+
+Malory      >20426
+6. ssh net2_student4@10.3.9.33 -R 20467:127.0.0.1:3597 -NT
+
+
+
+10.50.38.17 >
+
+ssh net2_student4@10.50.38.17 -L 20421:10.1.2.200:23 -NT
+ssh net2_student4@127.0.0.1 -p20469 -L 20421:10.1.2.200:23 -NT
+ssh net2_student4@10.1.2.130 -R 20468:127.0.0.1:8976 -NT
+ssh net2_student4@10.50.38.17 -L 20423:127.0.0.1:20468 -NT
+ssh net2_student4@127.0.0.1 -p 20423 -L 20424:10.2.5.20:22 -NT
+ssh net2_student4@127.0.0.1 -p 20424 -L 20425:10.3.9.39:23 -NT
+ssh net2_student4@10.3.9.33 -R 20467:127.0.0.1:3597 -NT
+ssh net2_student4@127.0.0.1 -p 20424 -L 20426:127.0.0.1:20467 -NT
+
+
+
+ssh net2_student4@127.0.0.1 -p 20479 -D 9050 -NT
+
+10.1.2.200
+
+
+
+
 
 
 
