@@ -6,6 +6,12 @@
 
 
 
+## to check snort
+ps -ef | grep snort
+
+
+
+
 ### Common iptable options
 ```
 -t - Specifies the table. (Default is filter)
