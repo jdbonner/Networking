@@ -157,11 +157,28 @@ sudo nft add rule ip CCTC OUTPUT tcp sport { 80 } ct state { new, established } 
 
 
 
-
-
-
 Validation
 d3b88e04de1e76482a1972f36734a7d8
+
+
+
+
+
+
+
+sudo iptables -t filter -P FORWARD ACCEPT
+
+
+
+
+sudo nft add table ip NAT
+sudo nft add chain ip NAT POSTROUTING { type nat hook postrouting priority 0 \; }
+sudo nft add chain ip NAT PREROUTING { type nat hook prerouting priority 0 \; }
+nft add chain ip NAT PREROUTING {type nat hook prerouting priority 0 \; }
+sudo nft add rule ip NAT POSTROUTING ip saddr 192.168.3.30 oif eth0 snat 172.16.82.112
+
+
+
 
 
 nat
